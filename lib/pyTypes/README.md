@@ -2,13 +2,16 @@
 # Documentation for pyTypes
 
 ## classes available
-### `TypedVar(name, val=None, strict=True)`
+### `TypedVar(Alias: str = "NO_ALIAS", Type: type = NoneType, Value: object = None)`
 
-- `getName()`, `getVal()`, `setVal()`, `disableStrict()`, `enableStrict()`
-- TypedVar must be given a variable name at initialization
-- TypedVar can be given a first value at init or with the first call of `.setVal()`
-- the first value assigned will be the fixed `<type>` of the TypedVar instance
-- you can only use `setVal` with a value of the same type as the TypedVar's fixed `<type>`
+- TypedVar will default to `TypedVar("NO_ALIAS", NoneType, None)`
+- TypedVar can be given a string alias at init or using `setAlias`
+- TypedVar can be assigned a type at init or using `setType`
+- TypedVar can be assigned a value at init or using `setValue`
+
+
+- `setType` will allow you to set the Type regardless, even if it doesn't match with the current `.__value`
+- `setValue` will only allow you to set the value as defined by the instance variable `.__type`, unless `override=True` (NOT RECOMMENDED)
+
+- During init, if `Value` is given and `Type` is not given, TypedVar will infer `.__type` from `.__value`
 - The TypedVar's type is an instance of `<class 'type'>` from invoking Python's builtin `type()` function
-- TypedVars are `strict` by default. 
-- You can disable `TypeError` throwing by disabling strict (NOT RECOMMENDED)

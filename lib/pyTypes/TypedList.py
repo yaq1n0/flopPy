@@ -24,10 +24,13 @@ class TypedList:
     def getType(self):
         return self.type
 
+    def setType(self, _type: type):
+        self.type = _type
+
     def append(self, item):
         # if the type hasn't been defined yet, define it and add the first item
         if self.type == 'undefined':
-            self.type = type(item)
+            self.setType(type(item))
             self.items.append(item)
             logging.debug(
                 "[pyTypes.TypedList] successfully added first item {} and set TypedList type to {}".format(item, self.type))

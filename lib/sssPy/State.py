@@ -12,15 +12,14 @@ class State(TypedList):
 
     def __init__(self):
         super().__init__()
-        # add and remove a TypedVar instance at init to set the TypedList instance type to TypedVar
-        typedVar = TypedVar()
-        super().append(typedVar)
-        super().remove(typedVar)
+        super().setType(TypedVar)
 
 
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.DEBUG)
+    logging.debug("====commencing self test for State.py====")
     state = State()
+    logging.debug("type should already be set to TypedVar: {}".format(state.getType()))
     state.append(TypedVar('test'))
-    print(state.getItems())
+    logging.debug("TypedVar(test) should be added to state: {}".format(state.getType())
 
