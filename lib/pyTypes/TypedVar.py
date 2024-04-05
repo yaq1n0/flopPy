@@ -51,11 +51,11 @@ class TypedVar(object):
 
     def __repr__(self) -> str:
         # this seems to show in print() statements
-        return "[TypeVar{}: {}]".format(self.__type, self.__value)
+        return "[TypedVar{}: {}]".format(self.__type, self.__value)
 
     def __str__(self) -> str:
         # this seems to show in logger() statements
-        return "[TypeVar{}: {}]".format(self.__type, self.__value)
+        return "[TypedVar{}: {}]".format(self.__type, self.__value)
 
     def getAlias(self) -> str:
         return self.__alias
@@ -72,7 +72,7 @@ class TypedVar(object):
             raise TypeError("[pyTypes.TypedVar] setAlias() error, Alias must be a string")
         else:
             self.__alias = Alias
-            logging.debug("[pyTypes.TypedVar] successfully set alias to {}".format(self.getAlias()))
+            logging.debug("[pyTypes.TypedVar] successfully set alias to {}".format(self.__alias))
             return True
 
     def setType(self, Type):
@@ -83,7 +83,7 @@ class TypedVar(object):
         # implicit else, set new Type
         else:
             self.__type = Type
-            logging.debug("[pyTypes.TypedVar] successfully set type to {}".format(self.getType()))
+            logging.debug("[pyTypes.TypedVar] successfully set type to {}".format(self.__type))
             return True
 
     def setValue(self, Value) -> bool:
@@ -91,65 +91,26 @@ class TypedVar(object):
         if not isinstance(Value, object):
             raise TypeError("[pyTypes.TypedVar] setValue() error, Value must be an object")
 
-        # disregard .__type and assign Value = None
-        if Value is None:
-            self.__value = Value
-            logging.debug("[pyTypes.TypedVar] successfully set value to {}".format(self.getValue()))
-            return True
-
-        # disregard .__type = None and infer new .__type from Value
+        # disregard .__type = NoneType and infer new .__type from Value
         if self.__type is NoneType:
             self.setType(type(Value))
             self.__value = Value
             logging.debug(
-                "[pyTypes.TypedVar] successfully overridden default none type to {} & set value to {} ".format(
-                    self.getType(), self.getValue()))
-            return True
-
-        # type(Value) matches .__type
-        if type(Value) is self.__type:
-            self.__value = Value
-            logging.debug("[pyTypes.TypedVar] successfully set value to {}".format(self.getValue()))
+                "[pyTypes.TypedVar] successfully overridden default NoneType to {} & set value to {} ".format(
+                    self.__type, self.__value))
             return True
 
         # type(Value) doesn't match .__type
         if type(Value) is not self.__type:
             raise TypeError(
-                "[pyTypes.TypedVar] setValue() error, can't assign {} type to TypedVar<{}>".format(
-                    type(Value), self.getType()))
+                "[pyTypes.TypedVar] setValue() error, can't assign {} type to TypedVar{}".format(
+                    type(Value), self.__type))
+
+        # type(Value) matches .__type
+        if type(Value) is self.__type:
+            self.__value = Value
+            logging.debug("[pyTypes.TypedVar] successfully set value to {}".format(self.__type))
+            return True
 
         # undefined behavior catch all
         raise Exception("[pyTypes.TypedVar] Unexpected error in setValue()")
-
-
-if __name__ == '__main__':
-    logging.getLogger().setLevel(logging.DEBUG)
-    logging.debug("====commencing self test for TypedVar.py====")
-    logging.debug("\n\n==testing implicit all")
-    typedVar0 = TypedVar()
-
-    logging.debug("\n\n==testing explicit type, None value")
-    typedVar1 = TypedVar(Type=int)
-
-    logging.debug("\n\n==testing explicit value, inferred type")
-    typedVar2 = TypedVar(Value=100)
-
-    logging.debug("\n\n==testing explicit type and value [SUCCESS]")
-    typedVar3 = TypedVar(Type=int, Value=100)
-
-    logging.debug("\n\n==testing explicit type and value [FAIL]")
-    try:
-        typedVar4 = TypedVar(Type=int, Value="100")
-    except TypeError as e:
-        logging.error(e)
-
-    logging.debug("\n\n==testing set value [SUCCESS]")
-    typedVar5 = TypedVar()
-    typedVar5.setValue(100)
-
-    logging.debug("\n\n==testing set value [FAIL]")
-    try:
-        typedVar6 = TypedVar(Type=str)
-        typedVar6.setValue(100)
-    except TypeError as e:
-        logging.error(e)

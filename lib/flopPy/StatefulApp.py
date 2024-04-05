@@ -1,9 +1,9 @@
-""" flopPy StatefulApp root wrapper main file """
+
 
 from tkinter import Tk
 import logging
 import types
-from lib.sssPy import State
+from lib.pySSS import State
 
 
 class StatefulApp:
@@ -20,10 +20,7 @@ class StatefulApp:
         self.rootStrict = strict
 
         # create state
-        self.appState = State(strict=)
-        # states are strict by
-        self.appState.enableStrict()
-
+        self.appState = State()
 
         # call initialization subroutines
         self.setTitle()
@@ -51,11 +48,7 @@ class StatefulApp:
         return
 
     def addBind(self, bind, event):
-        if not isinstance(bind, str):
-            if :
-
-
-        if not isinstance(event, types.FunctionType):
+        return
 
 
     def bindAll(self):
@@ -71,7 +64,7 @@ class StatefulApp:
 
 if __name__ == "__main__":
     app = StatefulApp()
-    app.addBind()
+    # app.addBind()
 
     app.run()
 

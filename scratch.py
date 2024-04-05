@@ -43,3 +43,5 @@ import types
 #
 # print(test.x)
 
+print(isinstance(None, object))
+
